@@ -3,9 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Todo List</title>
 </head>
 <body>
-    <h1>Heeeeeee</h1>
+    <div class="layout-container">
+
+        <header class="layout-header">
+            <div class="header-content">
+                <h1 class="header-title">Todo List</h1>
+                <!--div made for possible future links-->
+            </div>
+        </header>
+
+        <div class="layout-main">
+
+            <aside class="project-section">
+                <h2 class="project-section-title">Projects</h2>
+                <ul class="project-list" id="project-list">
+                    <li class="project-item">Default</li>
+                </ul>
+            
+                <form class="project-form" id="project-form">
+                    <input class="project-input" id="project-input" type="text" placeholder="Add Project" autocomplete="off" />
+                    <button class="project-submit" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                    </button>
+                    <button class="project-cancel" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                    </button>
+                </form>
+                <button class="project-toggle" id="toggle-project-form">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                </button>
+            </aside>            
+
+            <div class="todo-section">
+                <h2 class="todo-section-title">Todos</h2>
+                <ul class="todo-list" id="todo-list">
+                    <!-- Todo items will be added here -->
+                </ul>
+                
+                <form class="todo-form" id="todo-form">
+                    <input class="todo-input" id="todo-input" type="text" placeholder="Add Task" autocomplete="off" />
+                    <button class="todo-submit" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                    </button>
+                    <button class="todo-cancel" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                    </button>
+                </form>
+                <button class="todo-toggle" id="toggle-todo-form">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                </button>
+            </div>            
+
+        </div>
+
+    </div>
 </body>
 </html>
