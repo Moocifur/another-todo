@@ -1,5 +1,6 @@
 // project.js
 
+// Factory Function
 export const createProject = (name) => {
     const todos = [];
 

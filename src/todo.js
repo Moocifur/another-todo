@@ -1,5 +1,6 @@
 /* todos.js */
 
+// Factory Function
 export const createTodo = (title, description, dueDate, priority, notes = '', checklist = []) => {
     let completed = false;
 
