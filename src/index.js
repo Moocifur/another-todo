@@ -16,10 +16,8 @@ function renderProjects() {
     projectList.appendChild(defaultItem);
 
     defaultItem.addEventListener('click', () => {
-        console.log('poopie');
-        renderTodos({
-            todos: projectManager.getProjects().flatMap((project) => project.todos),
-        });
+        console.log('Show All Todos clicked');
+        renderTodos(null, true); // Pass `true` for the default project
     });
 
     // Render Projects
@@ -51,14 +49,25 @@ function renderProjects() {
         li.appendChild(removeButton);
         projectList.appendChild(li);
     });
+
+    // Render the default view on initial load
+    renderTodos(null, true); // Show all todos by default
 };
 
-
-function renderTodos(project) {
+// Render Todos in Main
+function renderTodos(project, isDefault = false) {
     const todoList = document.getElementById('todo-list');
+    const todoForm = document.getElementById('todo-form');
+    const todoInput = document.getElementById('todo-input');   
     todoList.innerHTML = '';
 
-    project.todos.forEach((todo) => {
+    // True : False
+    const todos = isDefault
+    ? projectManager.getProjects().flatMap((p) => p.todos)
+    : project.todos;
+
+    // Create todo
+    todos.forEach((todo) => {
         const li = document.createElement('li');
         li.textContent = todo.title;
         li.classList.add('todo-item');
@@ -69,16 +78,42 @@ function renderTodos(project) {
         toggleButton.classList.add('todo-toggle');
         toggleButton.addEventListener('click', () => {
             todo.toggleCompleted();
-            renderTodos(project);
+            renderTodos(project, isDefault);
         });
 
         li.appendChild(toggleButton);
         todoList.appendChild(li);
-    })
+    });
+
+    // Handle Form Submission
+    todoForm.onsubmit = (e) => {
+        e.preventDefault();
+
+        const todoTitle = todoInput.value.trim();
+        if (todoTitle) {
+            if (isDefault) {
+                // Add todo to the first project or create one if none exist
+                let targetProject = projectManager.getProjects()[0];
+                if (!targetProject) {
+                    targetProject = createProject('General');
+                    projectManager.addProject(targetProject);
+                    renderProjects();
+                }
+                targetProject.addTodo(createTodo(todoTitle, '', '', 'Medium'));
+            } else {
+                project.addTodo(createTodo(todoTitle, '', '', 'Medium'));
+            }
+
+            renderTodos(project, isDefault);
+            todoInput.value = '';
+        } else {
+            alert('nope');
+        }
+    }
 }
 
 
-// Example Usage
+// Example Usage--------------------------------
 const exampleTodo = createTodo(
     'Finish Odin Project Todo App',
     'Work on Javascript module',
