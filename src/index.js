@@ -4,10 +4,38 @@ import { createTodo } from "./todo.js";
 import { createProject } from "./project.js";
 import { projectManager } from "./projectManager.js"
 
-// projects in sidebar
+//FUNCTIONS
+
+// Duplicate Project Checker
+function isDuplicateProjectName(projectName) {
+    return projectManager.getProjects().some((project) => project.name === projectName);
+}
+
+// Clear Page
+function clearElement(element) {
+    element.innerHTML = '';
+}
+
+// Handle Project Click
+function handleProjectClick(project) {
+    console.log(`Project select: ${project.name}`);
+    renderTodos(project);
+}
+
+// Handle Project Remove
+function handleProjectRemove(project) {
+    const projects = projectManager.getProjects();
+    const projectIndex = projects.indexOf(project);
+    if (projectIndex !== -1) {
+        projects.splice(projectIndex, 1);
+        renderProjects();
+    }
+}
+
+// Render Projects in Sidebar
 function renderProjects() {
     const projectList = document.getElementById('project-list');
-    projectList.innerHTML = '';
+    clearElement(projectList);
 
     // Default Project
     const defaultItem = document.createElement('li');
@@ -18,7 +46,7 @@ function renderProjects() {
     defaultItem.addEventListener('click', () => {
         console.log('Show All Todos clicked');
         renderTodos(null, true); // Pass `true` for the default project
-    });
+    }); // I'M HERE
 
     // Render Projects
     const projects = projectManager.getProjects();
@@ -30,19 +58,16 @@ function renderProjects() {
         li.classList.add('project-item');
 
         // Add clickability to li
-        li.addEventListener('click', () => {
-            console.log(`Project selected: ${project.name}`);
-            renderTodos(project);
-        });
+        li.addEventListener('click', () => handleProjectClick(project));
 
         // Add remove button with construction
         const removeButton = document.createElement('button');
         removeButton.textContent = "Remove";
         removeButton.classList.add('remove-project');
+
         removeButton.addEventListener('click', (e) => {
             e.stopPropagation();
-            projectManager.getProjects().splice(projects.indexOf(project), 1);
-            renderProjects();
+            handleProjectRemove(project);
         });
 
         // Add to the DOM
@@ -51,20 +76,58 @@ function renderProjects() {
     });
 
     // Render the default view on initial load
-    renderTodos(null, true); // Show all todos by default
+    renderTodos(null, true); // Show all tod.os by default
 };
+
+// Setup Project Form @@@@@@@
+function setupProjectForm() {
+    const projectForm = document.getElementById('project-form');
+    const projectInput = document.getElementById('project-input');
+
+    // When submit is activated..
+    projectForm.onsubmit = (e) => {
+        e.preventDefault();
+
+        // Collect Input
+        const projectName = projectInput.value.trim();
+        if (projectName) {
+            // if a project has same name as input...
+            if (isDuplicateProjectName(projectName)) {
+                alert('Project with this name already exists.');
+            } else {
+                const newProject = createProject(projectName);
+                projectManager.addProject(newProject);
+                renderProjects();
+                projectInput.value = '';
+            }
+        } else {
+            alert ('Please enter a project name.');
+        }
+    };
+}
+
+// Initial Calls?
+renderProjects();
+setupProjectForm();
 
 // Render Todos in Main
 function renderTodos(project, isDefault = false) {
     const todoList = document.getElementById('todo-list');
     const todoForm = document.getElementById('todo-form');
     const todoInput = document.getElementById('todo-input');   
-    todoList.innerHTML = '';
+    clearElement(todoList);
 
     // True : False
     const todos = isDefault
     ? projectManager.getProjects().flatMap((p) => p.todos)
     : project.todos;
+
+    //
+    if (isDefault) {
+        const header = document.createElement('h3');
+        header.textContent = "All Todos";
+        todoList.appendChild(header);
+    }
 
     // Create todo
     todos.forEach((todo) => {
@@ -85,29 +148,24 @@ function renderTodos(project, isDefault = false) {
         todoList.appendChild(li);
     });
 
-    // Handle Form Submission
+    // Handle Todo Form Submission
     todoForm.onsubmit = (e) => {
         e.preventDefault();
 
         const todoTitle = todoInput.value.trim();
         if (todoTitle) {
-            if (isDefault) {
-                // Add todo to the first project or create one if none exist
-                let targetProject = projectManager.getProjects()[0];
-                if (!targetProject) {
-                    targetProject = createProject('General');
-                    projectManager.addProject(targetProject);
-                    renderProjects();
-                }
-                targetProject.addTodo(createTodo(todoTitle, '', '', 'Medium'));
-            } else {
-                project.addTodo(createTodo(todoTitle, '', '', 'Medium'));
+            const targetProject = isDefault
+            ? projectManager.getProject()[0] || createProject('General')
+            : project;
+
+            if (isDefault && !projectManager.getProjects().length) {
+                projectManager.addProject(targetProject);
+                renderProjects();
             }
 
+            targetProject.addTodo(createTodo(todoTitle, '', '', 'Medium'));
             renderTodos(project, isDefault);
             todoInput.value = '';
-        } else {
-            alert('nope');
         }
     }
 }
