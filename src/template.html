@@ -1,3 +1,4 @@
+<!-- template.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,10 +21,10 @@
             <aside class="project-section">
                 <h2 class="project-section-title">Projects</h2>
                 <ul class="project-list" id="project-list">
-                    <li class="project-item default-item">Default</li>
+                    <!-- Project items wil be addded here -->
                 </ul>
             
-                <form class="project-form" id="project-form">
+                <form class="project-form hidden" id="project-form">
                     <input class="project-input" id="project-input" type="text" placeholder="Add Project" autocomplete="off" />
                     <button class="project-submit" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
@@ -43,8 +44,17 @@
                     <!-- Todo items will be added here -->
                 </ul>
                 
-                <form class="todo-form" id="todo-form">
+                <form class="todo-form hidden" id="todo-form">
                     <input class="todo-input" id="todo-input" type="text" placeholder="Add Task" autocomplete="off" />
+                    
+                    <textarea id="todo-description" placeholder="Description"></textarea>
+                    <input type="date" id="todo-due-date">
+                    <select id="todo-priority">
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low" selected>Low</option>
+                    </select>
+
                     <button class="todo-submit" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
                     </button>
